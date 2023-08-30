@@ -4,12 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles.css">
-  <script src="./calculator.js"></script>
+  <script src="./calculator.js" defer></script>
   <title>Calculator</title>
 </head>
+
 <body>
-  <!-- <div>header</div> -->
-  <div class="calculator"></div>
-  <!-- <div>footer</div> -->
+  <div class="main-content">
+    <div class="calculator">
+      <div class="calc display">
+        <div class="display-sub">
+          
+        </div>
+        <div class="display-main"></div>
+      </div>
+      <div class="calc all-buttons">
+        <span class="btn misc clear" data-value="">C</span>
+        <span class="btn misc posneg" data-value="">+/-</span>
+        <span class="btn misc power" data-value="">x^y</span>
+        <span class="btn operator btn-divide" data-func="divide">÷</span>
+        <span class="btn number btn-7" data-value="7">7</span>
+        <span class="btn number btn-8" data-value="8">8</span>
+        <span class="btn number btn-9" data-value="9">9</span>
+        <span class="btn operator btn-mult" data-func="multiply">×</span>
+        <span class="btn number btn-4" data-value="4">4</span>
+        <span class="btn number btn-5" data-value="5">5</span>
+        <span class="btn number btn-6" data-value="6">6</span>
+        <span class="btn operator btn-minus" data-func="subtract">-</span>
+        <span class="btn number btn-1" data-value="1">1</span>
+        <span class="btn number btn-2" data-value="2">2</span>
+        <span class="btn number btn-3" data-value="3">3</span>
+        <span class="btn operator btn-plus" data-func="add">+</span>
+        <span class="btn number btn-0" data-value="0">0</span>
+        <span class="btn number btn-decimal" data-value=".">.</span>
+        <span class="btn btn-equals" data-value="">=</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer">footer placeholder text</div>
+  
 </body>
 </html>
