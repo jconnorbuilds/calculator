@@ -47,11 +47,30 @@ numberButtons.forEach((btn) => btn.addEventListener('click', (e) => {
 }));
 
 operatorButtons.forEach((btn) => btn.addEventListener('click', (e) => {
-  value1 = parseFloat(calcDisplayMain.textContent);
-  if (value1) operator = operatorFunctions[e.target.dataset.func];
-  value2 = '';
-  result = '';
-  updateDisplay(`${value1} ${symbols[operator.name]} ${value2}`, result);
+  
+  if (value1 && value2 && result) {
+    operator = operatorFunctions[e.target.dataset.func];
+    value1 = result;
+    value2 = '';
+    result = '';
+    console.log("A")
+    updateDisplay(`${value1} ${symbols[operator.name]} ${value2}`, result);
+  } else if (!value1) {
+    operator = operatorFunctions[e.target.dataset.func];
+    value1 = parseFloat(calcDisplayMain.textContent);
+    value2 = '';
+    result = '';
+    console.log("C")
+    updateDisplay(`${value1} ${symbols[operator.name]} ${value2}`, result);
+  } else if (value1 && !value2) {
+    value2 = parseFloat(calcDisplayMain.textContent);
+    value1 = operate(value1, value2, operator);
+    value2 = '';
+    result = '';
+    operator = operatorFunctions[e.target.dataset.func];
+    console.log("D")
+    updateDisplay(`${value1} ${symbols[operator.name]} ${value2}`, result);
+  };
 }));
 
 clearButton.addEventListener('click', () => {
@@ -111,6 +130,7 @@ function operate(val1, val2, operator) {
   
   if (!isNaN(result)) {
     updateDisplay(`${val1} ${symbols[operator.name]} ${val2}`, result);
+    return result;
   } else if (isNaN(result)) {
     error = true;
     result = '';
@@ -118,4 +138,5 @@ function operate(val1, val2, operator) {
     value2 = '';
     operator = '';
   };
+  console.log('equals', {value1}, {value2}, {result})
 }
