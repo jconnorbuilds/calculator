@@ -93,7 +93,8 @@ body {
   justify-self: end;
 }
 
-.btn.number {
+.btn.number,
+.btn.btn-decimal {
   background-color: #8447FF;
 }
 

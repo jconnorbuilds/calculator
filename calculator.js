@@ -24,7 +24,7 @@ let symbols = {
   subtract: '-',
   multiply: '×',
   divide: '÷',
-}
+};
 
 let operatorFunctions = {
   'add': add,
@@ -36,9 +36,13 @@ let operatorFunctions = {
 numberButtons.forEach((btn) => btn.addEventListener('click', (e) => {
   if (error === true) initialize();
   if (calcDisplayMain.textContent.length <= 8) {
-    if (btn.classList.contains('btn-decimal')) {
+    if (btn.dataset.value === '.') {
       if (!calcDisplayMain.textContent.includes('.')) {
-        calcDisplayMain.textContent += btn.dataset.value;
+        if (!calcDisplayMain.textContent) {
+          calcDisplayMain.textContent += "0.";
+        } else {
+          calcDisplayMain.textContent += ".";
+        }
       }
     } else {
       calcDisplayMain.textContent += btn.dataset.value;
@@ -47,24 +51,28 @@ numberButtons.forEach((btn) => btn.addEventListener('click', (e) => {
 }));
 
 operatorButtons.forEach((btn) => btn.addEventListener('click', (e) => {
+
   if (value1 && value2 && result) {
     operator = operatorFunctions[e.target.dataset.func];
     value1 = parseFloat(result);
+
   } else if (!value1) {
     operator = operatorFunctions[e.target.dataset.func];
     value1 = parseFloat(calcDisplayMain.textContent);
+
   } else if (value1 && !value2) {
-    value2 = parseFloat(calcDisplayMain.textContent);
-    value1 = operate(value1, value2, operator);
+    value2 = calcDisplayMain.textContent ? parseFloat(calcDisplayMain.textContent) : value1;
+    if (value2) value1 = operate(value1, value2, operator);
     operator = operatorFunctions[e.target.dataset.func];
   };
+
   value2 = '';
   result = '';
-  updateDisplay(`${value1} ${symbols[operator.name]} ${value2}`, result);
+  if (value1) updateDisplay(`${value1} ${symbols[operator.name]} ${value2}`, result);
 }));
 
 clearButton.addEventListener('click', () => {
-  calcDisplayMain.textContent ? updateDisplay('', '') : initialize()
+  initialize();
 });
 
 equalsButton.addEventListener('click', () => {
@@ -73,7 +81,6 @@ equalsButton.addEventListener('click', () => {
   value1 = result ? result : value1;
 
   if (operator && calcDisplayMain.textContent) operate(value1, value2, operator);
-
 });
 
 function initialize() {
@@ -82,17 +89,17 @@ function initialize() {
   value2 = '';
   operator = '';
   result = '';
+  error = false;
 };
 
 function updateDisplay(sub, main) {
   calcDisplaySub.textContent = sub;
   calcDisplayMain.textContent = main;;
-}
+};
 
 function round(int, places=6) {
   return Math.round(int * (10 ** places))/(10 ** places)
-}
-
+};
 
 function add(a, b) {
   return a + b;
@@ -128,5 +135,4 @@ function operate(val1, val2, operator) {
     value2 = '';
     operator = '';
   };
-  console.log('equals', {value1}, {value2}, {result})
 }
