@@ -40,7 +40,6 @@ const createResultString = (key, displayedValue, state) => {
     if (lastPressedKeyType === 'equals') {
       calcDisplaySub.textContent = updateSubDisplay(valueOne, '', operator)
     }
-    console.log(displayedValue.length)
     if (displayedValue.length < 9) {
       return displayedValue === '0' ||
       lastPressedKeyType === 'operator' ||
@@ -59,7 +58,6 @@ const createResultString = (key, displayedValue, state) => {
     return displayedValue;
   };
   if (keyType === 'operator') {
-    console.log(keyValue)
     if (operator &&
         valueOne &&
         lastPressedKeyType != 'operator' &&
@@ -100,7 +98,6 @@ const updateCalculatorState = (key, displayedValue, calculatedValue, calculator)
   const lastPressedKeyType = calculator.dataset.lastPressedKeyType;
   const errorState = calculator.dataset.errorState;
 
-  console.log({errorState})
   if (errorState && !keyType === 'clear') return;
   Array.from(key.parentNode.children).forEach(key => key.classList.remove('is-pressed'));
   
