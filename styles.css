@@ -98,6 +98,10 @@ body {
   background-color: #8447FF;
 }
 
+.btn.operator.is-pressed {
+  background-color: blue;
+}
+
 .btn.misc {
   background-color: #A9A9A9;
 }
