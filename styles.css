@@ -51,12 +51,15 @@ body {
 
 
 .display-sub {
-  height: 40%;
+  height: 30%;
+  color: darkgray;
 }
 
 .display-main {
-  height: 60%;
+  height: 70%;
   font-size: 4em;
+  text-shadow: 0px 0px 60px rgb(225, 159, 255)
+  
 }
 
 .all-buttons {
@@ -68,21 +71,35 @@ body {
 
 .all-buttons .btn {
   display: flex;
-  /* border: 2px solid #a9a9a9; */
   box-sizing: border-box;
   border-radius: 35%;
   margin: 8px;
-  /* padding: 15px; */
   height: 68px;
   justify-content: center;
   align-items: center;
   opacity: 85%;
   transition: opacity 100ms;
+  transition: background-color 200ms;
+  
 }
 
 .all-buttons .btn:hover {
   opacity: 100%;
   border: 2px solid #a9a9a9;
+}
+
+.btn.number.activated {
+  background-color: #a97efe;
+  opacity: 100%;
+  transition: all 50ms;
+}
+
+.btn.operator.activated,
+.btn.btn-equals.activated {
+  background-color: #c78092;
+  opacity: 100%;
+  
+  
 }
 
 .all-buttons .number.btn-0 {
@@ -99,7 +116,8 @@ body {
 }
 
 .btn.operator.is-pressed {
-  background-color: blue;
+  background-color: #c43559;
+  opacity: 100%;
 }
 
 .btn.misc {

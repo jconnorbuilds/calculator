@@ -3,11 +3,7 @@ const calculator = document.querySelector('.calculator');
 const calcDisplayMain = document.querySelector('.display-main');
 const calcDisplaySub = document.querySelector('.display-sub');
 const calcKeys = document.querySelector('.all-buttons');
-const allButtons = document.querySelectorAll('.calc .btn');
-const numberButtons = document.querySelectorAll('.calc .number');
-const operatorButtons = document.querySelectorAll('.calc .operator');
 
-// const clearButton = document.querySelector('.calc .clear');
 const posNegButton = document.querySelector('.calc .posneg');
 const exponentButton = document.querySelector('.calc .power'); 
 const plusButton = document.querySelector('.btn-plus');
@@ -15,13 +11,6 @@ const minusButton = document.querySelector('.btn-minus');
 const multiplyButton = document.querySelector('.btn-mult');
 const divideButton = document.querySelector('.btn-divide');
 const equalsButton = document.querySelector('.btn-equals');
-
-// let valueOne = '';
-// let valueTwo = '';
-// let operator = '';
-// let result = '';
-// let error = false;
-// let lastPressedKeyType;
 
 let symbols = {
   add: '+',
@@ -44,14 +33,25 @@ const createResultString = (key, displayedValue, state) => {
   const valueOne = state.valueOne;
   const operator = state.operator;
   const modValue = state.modValue;
+  const errorState = state.error;
+  if (errorState && !keyType === 'clear') return;
 
   if (keyType === 'number') {
-    return displayedValue.length < 9 &&
-      displayedValue === '0' ||
+    if (lastPressedKeyType === 'equals') {
+      calcDisplaySub.textContent = updateSubDisplay(valueOne, '', operator)
+    }
+    console.log(displayedValue.length)
+    if (displayedValue.length < 9) {
+      return displayedValue === '0' ||
       lastPressedKeyType === 'operator' ||
       lastPressedKeyType === 'equals'
       ? keyValue
       : displayedValue + keyValue
+    } else if (lastPressedKeyType === 'operator') {
+      return keyValue;
+    } else {
+      return displayedValue;
+    };
   };
   if (keyType === 'decimal') {
     if (!displayedValue.includes('.')) return displayedValue + keyValue;
@@ -59,21 +59,33 @@ const createResultString = (key, displayedValue, state) => {
     return displayedValue;
   };
   if (keyType === 'operator') {
-    return operator &&
-      valueOne &&
-      lastPressedKeyType != 'operator' &&
-      lastPressedKeyType != 'equals'
-      ? operate(valueOne, displayedValue, operator)
-      : displayedValue;
+    console.log(keyValue)
+    if (operator &&
+        valueOne &&
+        lastPressedKeyType != 'operator' &&
+        lastPressedKeyType != 'equals') {
+      let calculatedValue = operate(valueOne, displayedValue, operator)
+      calcDisplaySub.textContent = updateSubDisplay(calculatedValue, '', operator)
+      return calculatedValue;
+      } else {
+        calcDisplaySub.textContent = updateSubDisplay(displayedValue, '', key.dataset.func)
+      return displayedValue;
+      };
   };
+
   if (keyType === 'clear') {
+    if (keyValue === 'AC') calcDisplaySub.textContent = updateSubDisplay('', '', '')
     return '0';
   };
   if (keyType === 'equals') {
     if (valueOne) {
-      return (lastPressedKeyType === 'equals')
-        ? operate(displayedValue, modValue, operator)
-        : operate(valueOne, displayedValue, operator)
+      if (lastPressedKeyType === 'equals') {
+        calcDisplaySub.textContent = updateSubDisplay(displayedValue, modValue, operator)
+        return operate(displayedValue, modValue, operator)
+      } else {
+        calcDisplaySub.textContent = updateSubDisplay(valueOne, displayedValue, operator)
+        return operate(valueOne, displayedValue, operator)
+      };
     };
     return displayedValue;
   };
@@ -86,12 +98,13 @@ const updateCalculatorState = (key, displayedValue, calculatedValue, calculator)
   const operator = calculator.dataset.operator;
   const valueOne = calculator.dataset.valueOne;
   const lastPressedKeyType = calculator.dataset.lastPressedKeyType;
+  const errorState = calculator.dataset.errorState;
+
+  console.log({errorState})
+  if (errorState && !keyType === 'clear') return;
   Array.from(key.parentNode.children).forEach(key => key.classList.remove('is-pressed'));
   
   if (keyType === 'operator') {
-    if (lastPressedKeyType === 'operator') {
-      
-    }
     key.classList.add('is-pressed')
     calculator.dataset.operator = action
     calculator.dataset.valueOne = operator &&
@@ -100,7 +113,6 @@ const updateCalculatorState = (key, displayedValue, calculatedValue, calculator)
       lastPressedKeyType != 'equals'
       ? calculator.dataset.valueOne = calculatedValue
       : calculator.dataset.valueOne = displayedValue;
-
   };
   if (keyType === 'equals') {
     calculator.dataset.modValue = valueOne && lastPressedKeyType === 'equals'
@@ -108,7 +120,6 @@ const updateCalculatorState = (key, displayedValue, calculatedValue, calculator)
       : displayedValue
   };
   if (keyType === 'clear') {
-
     if (key.textContent === 'AC') {
       calculator.dataset.valueOne = '';
       calculator.dataset.modValue = '';
@@ -118,11 +129,9 @@ const updateCalculatorState = (key, displayedValue, calculatedValue, calculator)
     } else {
       key.textContent = 'AC';
     }
-    error = false;
+    calculator.dataset.errorState = false;
     calcDisplayMain.textContent = '0';
-    
   };
-
   if (keyType != 'clear') {
     const clearButton = calculator.querySelector('[data-type=clear]');
     clearButton.textContent = 'C';
@@ -130,20 +139,25 @@ const updateCalculatorState = (key, displayedValue, calculatedValue, calculator)
   calculator.dataset.lastPressedKeyType = keyType;
 };
 
-calcKeys.addEventListener('click', (e) => {
-  if (!e.target.matches('span')) return 
+const updateSubDisplay = (n1, n2, oper) => {
+  const valueOne = n1 ? n1 : '';
+  const valueTwo = n2 ? n2 : '';
+  const operator = oper ? symbols[oper] : '';
+  return `${valueOne} ${operator} ${valueTwo}`
+}
+
+calcKeys.addEventListener('click', e => {
+  if (!e.target.matches('span') || 
+  calculator.dataset.errorState === "true" && e.target.dataset.type != 'clear' ) return 
   const key = e.target;
   const displayedValue = calcDisplayMain.textContent;
   const resultString = createResultString(key, displayedValue, calculator.dataset)
-  calcDisplayMain.textContent = resultString;
+  calcDisplayMain.textContent = isNaN(resultString) ? "..." : resultString;
 
   updateCalculatorState(key, displayedValue, resultString, calculator)
+  key.classList.add('activated')
+  setTimeout(() => key.classList.remove('activated'), 50)
 });
-
-function updateDisplay(sub, main) {
-  calcDisplaySub.textContent = sub;
-  calcDisplayMain.textContent = main;
-};
 
 function round(int, places=6) {
   return Math.round(int * (10 ** places))/(10 ** places)
@@ -165,9 +179,13 @@ function divide(a, b) {
   if (b != 0) {
     return a / b;
   } else {
-    updateDisplay(`>:(`,"...");
+    calcDisplayMain.textContent = "..."
+    calcDisplaySub.textContent = ">:("
+    calculator.dataset.errorState = true;
   };
 };
+
+calcKeys.addEventListener('mousedown', e => e.preventDefault())
 
 function operate(n1, n2, operator) {
   const operatorFunc = operatorFunctions[operator]
