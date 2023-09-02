@@ -65,10 +65,10 @@ const createResultString = (key, displayedValue, state) => {
       let calculatedValue = operate(valueOne, displayedValue, operator)
       calcDisplaySub.textContent = updateSubDisplay(calculatedValue, '', operator)
       return calculatedValue;
-      } else {
-        calcDisplaySub.textContent = updateSubDisplay(displayedValue, '', key.dataset.func)
-      return displayedValue;
-      };
+    } else {
+      calcDisplaySub.textContent = updateSubDisplay(displayedValue, '', key.dataset.func)
+    return displayedValue;
+    };
   };
 
   if (keyType === 'clear') {
@@ -191,3 +191,8 @@ function operate(n1, n2, operator) {
   result = round(operatorFunc(firstNum, secondNum));
   return result.toString().length > 9 ? result.toExponential(5) : result;
 }
+
+window.addEventListener('keypress', (e) => {
+  let targetButton = document.querySelector(`[data-key=${e.code}`)
+  if (targetButton) targetButton.click()
+})

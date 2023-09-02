@@ -20,7 +20,7 @@ body {
 .main-content {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
 }
@@ -131,4 +131,30 @@ span.btn.btn-equals {
   padding-bottom: 4px;
 }
 
+.legend {
+  font-size: 1.25rem;
+  background-color: #232551;
+  padding: 10px;
+  margin: 10px;
+  border: 2px solid darkgray;
+  color: gray;
+}
+
+.legend span {
+  padding: 3px 15px;
+  margin-bottom: 10px;
+  opacity: 85%;
+}
+
+.legend .key {
+  background-color: darkgray;
+  color: black;
+  border-radius: 8%;
+}
+
+.legend span.button {
+  background-color: #AF1B3F;
+  color: black;
+  border-radius: 35%;
+}
 
