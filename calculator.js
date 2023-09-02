@@ -63,7 +63,8 @@ const createResultString = (key, displayedValue, state) => {
         lastPressedKeyType != 'operator' &&
         lastPressedKeyType != 'equals') {
       let calculatedValue = operate(valueOne, displayedValue, operator)
-      calcDisplaySub.textContent = updateSubDisplay(calculatedValue, '', operator)
+      console.log(key.dataset.func)
+      calcDisplaySub.textContent = updateSubDisplay(calculatedValue, '', key.dataset.func)
       return calculatedValue;
     } else {
       calcDisplaySub.textContent = updateSubDisplay(displayedValue, '', key.dataset.func)
